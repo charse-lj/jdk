@@ -30,8 +30,9 @@ package java.lang.reflect;
  * {@code ?}, {@code ? extends Number}, or {@code ? super Integer}.
  *
  * @since 1.5
+ *
+ * 专门用来处理泛型中的通配符，需要注意的是，WildcardType并不是JAVA所有类型中的一种，表示的仅仅是类似 {? extends T}、{? super K}这样的通配符表达式
  */
-// 通配符
 public interface WildcardType extends Type {
     /**
      * Returns an array of {@code Type} objects representing the  upper
@@ -54,8 +55,8 @@ public interface WildcardType extends Type {
      * @throws MalformedParameterizedTypeException if any of the
      *                                             bounds refer to a parameterized type that cannot be instantiated
      *                                             for any reason
+     *  获取通配符表达式的上界
      */
-    // 通配符上界
     Type[] getUpperBounds();
     
     /**
@@ -80,8 +81,8 @@ public interface WildcardType extends Type {
      * @throws MalformedParameterizedTypeException if any of the
      *                                             bounds refer to a parameterized type that cannot be instantiated
      *                                             for any reason
+     * 获取通配符表达式的下界
      */
-    // 通配符下界
     Type[] getLowerBounds();
     
     // one or many? Up to language spec; currently only one, but this API allows for generalization.

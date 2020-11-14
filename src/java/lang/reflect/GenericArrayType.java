@@ -31,7 +31,7 @@ package java.lang.reflect;
  *
  * @since 1.5
  */
-// 泛型数组
+
 public interface GenericArrayType extends Type {
     /**
      * Returns a {@code Type} object representing the component type
@@ -50,7 +50,10 @@ public interface GenericArrayType extends Type {
      * @throws MalformedParameterizedTypeException if  the
      *                                             underlying array type's component type refers to a
      *                                             parameterized type that cannot be instantiated for any reason
+     * 返回数组中元素的类型，TypeVariable或者ParameterizedType
+     * List<String>[] stringListArray
+     * T[] tArray;
+     * 这个方法仅仅脱去最右边的[]之后剩下的内容就作为这个方法的返回值
      */
-    // 泛型数组的外层类型，如T之于T[]，T[]之于T[][]
     Type getGenericComponentType();
 }

@@ -566,6 +566,7 @@ public abstract class Clock {
         private static final long serialVersionUID = 6740630888130243051L;
         
         // 距离新纪元时间足够远的一个初始偏移量(距离当前时间足够近)
+        //新纪元时间点：UTC/GMT时间1970年1月1号0时0分0秒
         private static final long OFFSET_SEED = System.currentTimeMillis() / 1000 - 1024;
         
         // 基于"零时区"的系统时钟

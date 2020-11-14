@@ -244,7 +244,7 @@ public final class LocalDateTime implements Temporal, TemporalAdjuster, ChronoLo
     public static LocalDateTime now(Clock clock) {
         Objects.requireNonNull(clock, "clock");
     
-        // 获取clock时钟提供的时间戳
+        // 获取clock时钟提供的时间戳(不带时区的)
         final Instant instant = clock.instant();
         // 获取clock时钟提供的时区ID
         ZoneId zoneId = clock.getZone();

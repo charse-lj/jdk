@@ -69,8 +69,10 @@ public interface ParameterizedType extends Type {
      *                                             actual type parameters refer to a parameterized type that cannot
      *                                             be instantiated for any reason
      * @since 1.5
+     *
+     * 对于一个参数化类型而言，必定是带有泛型的，所有这里是为了获取到其中的泛型的具体类型，也就是<>中的内容
+     * 返回一个数组是因为，有时候会定义多个泛型，比如Map<String,String>
      */
-    // 参数化类型中的实际参数（argument）
     Type[] getActualTypeArguments();
     
     /**
@@ -81,8 +83,8 @@ public interface ParameterizedType extends Type {
      * that declared this type
      *
      * @since 1.5
+     * 擦除泛型后的原始类型
      */
-    // 擦除泛型后的原始类型
     Type getRawType();
     
     /**
@@ -102,7 +104,8 @@ public interface ParameterizedType extends Type {
      *                                             refers to a parameterized type that cannot be instantiated
      *                                             for any reason
      * @since 1.5
+     *
+     * 取这个类所在类的类型，这里可能比较拗口，举个例子，假如当前这个ParameterizedType的类型为O<T>.I<U>，那么调用这个方法所返回的就是一个O<T>类型
      */
-    // 泛型复合类型的"外层类型
     Type getOwnerType();
 }

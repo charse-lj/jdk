@@ -395,7 +395,7 @@ public class VM {
      *                  如果offsetInSeconds为System.currentTimeMillis()/1000，则返回当前时间点与上次调用System.currentTimeMillis()时的时间点的一个差值。
      *                  如果offsetInSeconds为System.currentTimeMillis()/1000-1024，则尽力返回最近1024秒内流逝的纳秒时间。
      *
-     * 新纪元时间点：UTC/GMT时间1970年1月1日0时0分0秒
+     * 新纪元时间点：UTC/GMT时间1970年1月1日0时0分0秒(不带时区)
      *
      * 参见：System.currentTimeMillis();
      */

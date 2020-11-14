@@ -47,15 +47,11 @@ package java.lang.reflect;
  *            underlying type variable.
  *
  * @since 1.5
- */
-/*
- * 类型变量
  *
- * 示例：
- * public class Bean<X, Y extends Number> {
- * }
+ * 类型变量，或者也可以叫泛型变量。具体就是指我们在申明泛型时定义的T,K,U这种变量
  *
- * Bean类中的类型变量是X和Y
+ * TypeVariable本身也使用了泛型，并且泛型的上界为GenericDeclaration,GenericDeclaration这个接口主要限定了哪些地方可以定义TypeVariable
+ * 只能在方法（包括普通方法跟构造方法）以及类上申明泛型
  */
 public interface TypeVariable<D extends GenericDeclaration> extends Type, AnnotatedElement {
     /**
@@ -77,8 +73,13 @@ public interface TypeVariable<D extends GenericDeclaration> extends Type, Annota
      * @throws MalformedParameterizedTypeException if any of the
      *                                             bounds refer to a parameterized type that cannot be instantiated
      *                                             for any reason
+     * 获取泛型的边界
+     *
+     * getBounds()会返回泛型的边界，但是这里的边界跟我们在参数化类型中定义的边界不同，这里的边界只有上界。即我们不通通过super关键字来申明一个泛型
+     * 如 class A<T super classA>{}
+     * 在申明泛型时，我们要明确一点，申明是为了使用，而在上面的例子中，我们不能使用T来干任何事情，因为我们不能确定T中的任何方法（只能确定它是一个Object，但是这没有任何意义）。
+     * 所以对于泛型变量来说，只存在上界，也就是只能使用extends关键字进行申明
      */
-    // 类型变量的边界（上界）
     Type[] getBounds();
     
     /**
@@ -88,16 +89,17 @@ public interface TypeVariable<D extends GenericDeclaration> extends Type, Annota
      * @return the generic declaration declared for this type variable.
      *
      * @since 1.5
+     * 获取申明所在的具体对象
      */
-    // 类型变量所属的泛型声明
     D getGenericDeclaration();
     
     /**
      * Returns the name of this type variable, as it occurs in the source code.
      *
      * @return the name of this type variable, as it appears in the source code
+     *
+     * 获取具体类型变量的名称
      */
-    // 类型变量名称
     String getName();
     
     /**
@@ -111,7 +113,9 @@ public interface TypeVariable<D extends GenericDeclaration> extends Type, Annota
      * @return an array of objects representing the upper bound(s) of the type variable
      *
      * @since 1.8
+     *
+     * getAnnotatedBounds()，此方法返回一个AnnotatedType类型的数组，获取的是我们在类型变量的上界。
+     * 不同于getBounds()方法的是，这个方法可以获取到边界上添加的注解
      */
-    // 上界的"类型注解+类型变量"
     AnnotatedType[] getAnnotatedBounds();
 }

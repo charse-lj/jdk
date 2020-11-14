@@ -879,6 +879,7 @@ public final class LocalDate implements Temporal, TemporalAdjuster, ChronoLocalD
      */
     // (周几)返回当前"本地日期"是所在周的第几天
     public DayOfWeek getDayOfWeek() {
+        //1970年1月1号星期四
         int dow0 = Math.floorMod(toEpochDay() + 3, 7);
         return DayOfWeek.of(dow0 + 1);
     }
