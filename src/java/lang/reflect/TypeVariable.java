@@ -73,7 +73,7 @@ public interface TypeVariable<D extends GenericDeclaration> extends Type, Annota
      * @throws MalformedParameterizedTypeException if any of the
      *                                             bounds refer to a parameterized type that cannot be instantiated
      *                                             for any reason
-     * 获取泛型的边界
+     * 获取泛型的边界 --> 类、方法、构造方法在声明泛型变量时,只能声明下边界
      *
      * getBounds()会返回泛型的边界，但是这里的边界跟我们在参数化类型中定义的边界不同，这里的边界只有上界。即我们不通通过super关键字来申明一个泛型
      * 如 class A<T super classA>{}
@@ -90,6 +90,7 @@ public interface TypeVariable<D extends GenericDeclaration> extends Type, Annota
      *
      * @since 1.5
      * 获取申明所在的具体对象
+     * D extends GenericDeclaration --> 限定可以定义TypeVariable的地方: Class、Method、Constructor
      */
     D getGenericDeclaration();
     

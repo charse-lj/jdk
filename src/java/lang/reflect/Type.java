@@ -31,8 +31,7 @@ package java.lang.reflect;
  * array types, type variables and primitive types.
  *
  * @since 1.5
- */
-/*
+ *
  * 代表Java中的“类型”
  *
  * 主要包括5种实现：
@@ -40,7 +39,7 @@ package java.lang.reflect;
  * TypeVariable
  * ParameterizedType
  * WildcardType
- * GenericArrayType
+ * git
  */
 public interface Type {
     /**
