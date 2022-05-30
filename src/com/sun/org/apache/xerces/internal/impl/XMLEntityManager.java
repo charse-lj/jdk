@@ -3016,10 +3016,25 @@ public class XMLEntityManager implements XMLComponent, XMLEntityResolver {
 
         private InputStream fInputStream;
         private byte[] fData;
+        /**
+         * 开始偏移量
+         */
         private int fStartOffset;
+        /**
+         * 结束偏移量.
+         */
         private int fEndOffset;
+        /**
+         * 待读取的数据偏移量.
+         */
         private int fOffset;
+        /**
+         * 已经有数据的长度.
+         */
         private int fLength;
+        /**
+         * 标记.
+         */
         private int fMark;
 
         public RewindableInputStream(InputStream is) {
@@ -3040,6 +3055,11 @@ public class XMLEntityManager implements XMLComponent, XMLEntityResolver {
             fOffset = fStartOffset;
         }
 
+        /**
+         * 读一个int值.
+         * @return .
+         * @throws IOException .
+         */
         public int read() throws IOException {
             int b = 0;
             if (fOffset < fLength) {
@@ -3048,22 +3068,38 @@ public class XMLEntityManager implements XMLComponent, XMLEntityResolver {
             if (fOffset == fEndOffset) {
                 return -1;
             }
+            //最后一个有效数据的偏移量和字节数组长度相等,需要扩容
             if (fOffset == fData.length) {
+                //扩容
                 byte[] newData = new byte[fOffset << 1];
                 System.arraycopy(fData, 0, newData, 0, fOffset);
                 fData = newData;
             }
+            // 读取一个int值,-1时表示没有可读数据.
             b = fInputStream.read();
             if (b == -1) {
                 fEndOffset = fOffset;
                 return -1;
             }
+            //有效数据长度+1,并保存到字节数组中
             fData[fLength++] = (byte)b;
+            //有效数据偏移量+1
             fOffset++;
             return b & 0xff;
         }
 
+        /**
+         * 从索引位置(off),往目标字节数组(b)中读取特定长度(len)的数据
+         * @param b   the buffer into which the data is read.
+         * @param off the start offset in array <code>b</code>
+         *            at which the data is written.
+         * @param len the maximum number of bytes to read.
+         *
+         * @return
+         * @throws IOException
+         */
         public int read(byte[] b, int off, int len) throws IOException {
+            //左侧可读字节数
             int bytesLeft = fLength - fOffset;
             if (bytesLeft == 0) {
                 if (fOffset == fEndOffset) {

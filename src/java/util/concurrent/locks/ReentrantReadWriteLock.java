@@ -1282,16 +1282,17 @@ public class ReentrantReadWriteLock implements ReadWriteLock, Serializable {
             int c = getState();
             
             // 获取独占锁（"写"锁）的许可证数量
-            if(exclusiveCount(c) != 0) {
+            if(exclusiveCount(c) != 0) { //-->存在写锁
                 // 如果存在"写"锁，进一步判断当前线程是否为"写"锁的持有者
                 if(getExclusiveOwnerThread() != current){
                     // 如果是别的线程持有"写"锁，当前线程又去申请"读"锁，则申请失败
                     return -1;
                 }
             }
+            //不存在写锁
             
             // 获取共享锁（"读"锁）的许可证数量
-            int r = sharedCount(c);
+            int r = sharedCount(c); //--> 读锁数
             
             // 判断是否需要阻塞当前申请"读"锁的线程
             if(!readerShouldBlock()) {
@@ -1302,9 +1303,9 @@ public class ReentrantReadWriteLock implements ReadWriteLock, Serializable {
                      * 在这儿如果有别的线程抢先更改了锁的状态，
                      * 那么此处的设置将失败
                      */
-                    if(compareAndSetState(c, c + SHARED_UNIT)){
+                    if(compareAndSetState(c, c + SHARED_UNIT)){ //-->检查锁是否有争用,没有state+1
                         // 如果当前的"读"锁空闲，说明出现了首个申请"读"锁的线程
-                        if(r == 0) {
+                        if(r == 0) { //无争用，说明r值是正确的
                             // 记下首个申请"读"锁的线程
                             firstReader = current;
                             // 记下首个申请"读"锁的线程对"读"锁的重入次数
@@ -1451,7 +1452,7 @@ public class ReentrantReadWriteLock implements ReadWriteLock, Serializable {
                             }
                             
                             if(rh == null){
-                                rh = readHolds.get();
+                                rh = readHolds.get();//缓存中取
                             } else {
                                 if(rh.tid != LockSupport.getThreadId(current)){
                                     rh = readHolds.get();
@@ -1500,11 +1501,12 @@ public class ReentrantReadWriteLock implements ReadWriteLock, Serializable {
                 // "读"锁许可证数量增一
                 if(compareAndSetState(c, c + SHARED_UNIT)) {
                     // 当前"读"锁空闲
-                    if(r == 0) {
+                    if(r == 0) { //--> 与else if 互斥
                         firstReader = current;
                         firstReaderHoldCount = 1;
                     } else {
                         if(firstReader == current) {
+                            // 如果是首个申请"读"锁的线程再次申请"读"锁，将其重入次数增一
                             firstReaderHoldCount++;
                         } else {
                             HoldCounter rh = cachedHoldCounter;

@@ -131,7 +131,7 @@ public abstract class SelectionKey {
      * an error pending, then it will add {@code OP_READ} to the key's
      * ready-operation set.  </p>
      */
-    public static final int OP_READ = 1 << 0;    // read
+    public static final int OP_READ = 1 << 0;    // read 1
     
     /**
      * Operation-set bit for write operations.
@@ -143,8 +143,8 @@ public abstract class SelectionKey {
      * remotely shut down for further writing, or has an error pending, then it
      * will add {@code OP_WRITE} to the key's ready set.  </p>
      */
-    public static final int OP_WRITE = 1 << 2;    // write
-    
+    public static final int OP_WRITE = 1 << 2;    // write 100
+
     /**
      * Operation-set bit for socket-connect operations.
      *
@@ -155,7 +155,7 @@ public abstract class SelectionKey {
      * connection sequence, or has an error pending, then it will add
      * {@code OP_CONNECT} to the key's ready set.  </p>
      */
-    public static final int OP_CONNECT = 1 << 3;    // connect
+    public static final int OP_CONNECT = 1 << 3;    // connect 1000
     
     /**
      * Operation-set bit for socket-accept operations.
@@ -167,7 +167,7 @@ public abstract class SelectionKey {
      * another connection, or has an error pending, then it will add
      * {@code OP_ACCEPT} to the key's ready set.  </p>
      */
-    public static final int OP_ACCEPT = 1 << 4;    // accept
+    public static final int OP_ACCEPT = 1 << 4;    // accept  10000
     
     
     private volatile Object attachment; // 参与注册的附属对象
@@ -228,7 +228,7 @@ public abstract class SelectionKey {
      * this method causes any previous attachment to be discarded.  The current
      * attachment may be discarded by attaching {@code null}.  </p>
      *
-     * @param ob The object to be attached; may be {@code null}
+     * @param attachment The object to be attached; may be {@code null}
      *
      * @return The previously-attached object, if any,
      * otherwise {@code null}
@@ -262,7 +262,7 @@ public abstract class SelectionKey {
      *
      * @throws CancelledKeyException If this key has been cancelled
      */
-    // 是否可以从通道读取数据了
+    // 是否可以从通道读取数据了    1&1=1;1&0=0
     public final boolean isReadable() {
         return (readyOps() & OP_READ) != 0;
     }

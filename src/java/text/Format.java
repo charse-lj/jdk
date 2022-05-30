@@ -175,6 +175,8 @@ public abstract class Format implements Serializable, Cloneable {
      *            <code>pos</code> is null
      * @exception IllegalArgumentException if the Format cannot format the given
      *            object
+     *
+     *  将Object格式化为String，并将此String放到toAppendTo里面
      */
     public abstract StringBuffer format(Object obj,
                     StringBuffer toAppendTo,
@@ -239,6 +241,8 @@ public abstract class Format implements Serializable, Cloneable {
      * @exception ParseException if the beginning of the specified string
      *            cannot be parsed.
      * @throws NullPointerException if {@code source} is null.
+     *
+     * 将String转换为Object，是format方法的逆向操作
      */
     public Object parseObject(String source) throws ParseException {
         ParsePosition pos = new ParsePosition(0);

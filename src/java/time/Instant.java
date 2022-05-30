@@ -192,6 +192,7 @@ import java.util.Objects;
  * @since 1.8
  */
 /*
+ * Instant用于记录时间线上某一瞬间的时间点，顾名思义就是时间戳
  * 时间戳，由代表UTC时间点的纪元秒部件和纳秒偏移部件组成，精度为纳秒（具体粒度由底层操作系统决定）。
  *
  * 注：
@@ -285,7 +286,7 @@ public final class Instant implements Temporal, TemporalAdjuster, Comparable<Ins
      *
      * @return the current instant using the system clock, not null
      */
-    // 返回由系统时钟提供的时间戳
+    // 返回由系统时钟提供的时间戳，调用的其实是Clock的方法
     public static Instant now() {
         Clock clock = Clock.systemUTC();
         return clock.instant();

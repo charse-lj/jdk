@@ -27,7 +27,8 @@ import jdk.vm.ci.meta.ValueKind;
 /**
  * Represents a target machine register.
  */
-public final class Register implements Comparable<Register> {
+public final class
+Register implements Comparable<Register> {
 
     public static final RegisterCategory SPECIAL = new RegisterCategory("SPECIAL");
 

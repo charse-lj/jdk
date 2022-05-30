@@ -45,7 +45,7 @@ import java.util.function.Consumer;
  * @author Mark Reinhold
  */
 // 与平台相关的通道选择器实现，此类对应于Windows平台
-class WindowsSelectorImpl extends SelectorImpl {
+public class WindowsSelectorImpl extends SelectorImpl {
     
     /** Maximum number of sockets for select(). Should be INIT_CAP times a power of 2 */
     /*
@@ -277,7 +277,7 @@ class WindowsSelectorImpl extends SelectorImpl {
         assert !selectionKey.isValid();
         assert Thread.holdsLock(this);
         
-        // 如果该"选择键"已经被处理过了，直接返回
+        // 如果该"选择键"已经被处理过了(不存在)，直接返回
         if(fdMap.remove(selectionKey) == null) {
             return;
         }
@@ -314,7 +314,9 @@ class WindowsSelectorImpl extends SelectorImpl {
         
         // 与growIfNeeded()中最后一步操作相反，这里需要减少操作批次
         if(totalChannels != 1 && totalChannels % MAX_SELECTABLE_FDS == 1) {
+            //哨兵
             totalChannels--;
+            //线程数
             threadsCount--; // The last thread has become redundant.
         }
     }
@@ -325,7 +327,7 @@ class WindowsSelectorImpl extends SelectorImpl {
     
     /*▼ 选择就绪通道 ████████████████████████████████████████████████████████████████████████████████┓ */
     
-    /*
+    /**
      * 选择可用的已就绪通道，返回本轮select()中找到的所有【可用的】"已就绪键"(已就绪通道)的数量
      *
      * 主要有三个步骤：
@@ -335,7 +337,7 @@ class WindowsSelectorImpl extends SelectorImpl {
      *
      * action : 如果不为null，用来处理可用的"已就绪键"；
      *          如果为null，则会将可用的"已就绪键"存储到"已就绪键集合"中(参见SelectorImpl#selectedKeys)
-     * timeout: 监听等待中的超时设置(参见SubSelector#poll())
+     * @param timeout: 监听等待中的超时设置(参见SubSelector#poll())
      *          timeout=0表示可以立即返回
      *          timeout=-1表示一直阻塞，直到本地被新来的事件唤醒选择器线程，然后传导到Java层
      *          timeout为其他值表示阻塞timeout毫秒
@@ -995,7 +997,7 @@ class WindowsSelectorImpl extends SelectorImpl {
             // 0号单元记录了fds中的元素数量，所以这里从索引1处开始遍历就可以
             for(int i = 1; i<=fds[0]; i++) {
                 int fdVal = fds[i];
-                
+
                 // 如果遍历途中遇到哨兵元素，则跳过该元素
                 if(fdVal == wakeupSourceFd) {
                     synchronized(interruptLock) {

@@ -115,6 +115,7 @@ class PollArrayWrapper {
     
     /* Prepare another pollfd struct for use */
     // 在pollArray[i]处存储一个"选择键"中通道在本地(native层)的文件描述符和一个无效的监听事件（无效事件用来占位）
+    //占8个字节(考虑字节对齐):前四个字节放channel对应的文件描述符;后面两个字节放对应感兴趣的事件
     void putEntry(int i, SelectionKeyImpl selectionKey) {
         putDescriptor(i, selectionKey.getFDVal());
         putEventOps(i, 0);

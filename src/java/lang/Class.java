@@ -1860,7 +1860,7 @@ public final class Class<T> implements Serializable, GenericDeclaration, Type, A
      */
     /*
      * 返回当前类中所有public方法，包括父类/父接口中的public方法
-     * 特别地，如果当前类是实例类，则无法获取父接口中的static方法（该方法虽然是public，但只有父接口可视）
+     * 特别地，如果当前类是实例类，则无法获取父接口中的static方法（该方法虽然是public，但只有父接口可视,static 是类的属性）
      * 对于父接口中的default方法，无论子类是否重写，这里均可以获取到它
      */
     @CallerSensitive
@@ -2432,7 +2432,7 @@ public final class Class<T> implements Serializable, GenericDeclaration, Type, A
     /**
      * @since 1.5
      */
-    // 1-1 返回该类上所有类型的注解，包括继承来的注解
+    // 1-1 返回该类上所有类型的注解，包括所有从父类继承来的注解
     public Annotation[] getAnnotations() {
         return AnnotationParser.toArray(annotationData().annotations);
     }

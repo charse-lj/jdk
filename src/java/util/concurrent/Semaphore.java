@@ -772,7 +772,7 @@ public class Semaphore implements Serializable {
                 
                 /* 至此，说明许可证数量充足，即成功借到了许可证 */
                 
-                // 更新许可证数量
+                // 更新许可证数量 -->更新成功表示无线程争用.
                 if(compareAndSetState(available, remaining)) {
                     // 返回【实际剩余】的许可证数量，>=0
                     return remaining;

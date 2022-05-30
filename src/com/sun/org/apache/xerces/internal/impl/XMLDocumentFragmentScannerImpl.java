@@ -91,10 +91,10 @@ public class XMLDocumentFragmentScannerImpl
     // scanner states
 
     //XXX this should be divided into more states.
-    /** Scanner state: start of markup. */
+    /** Scanner state: start of markup. 开始标记'<'*/
     protected static final int SCANNER_STATE_START_OF_MARKUP = 21;
 
-    /** Scanner state: content. */
+    /** Scanner state: content.标签中的内容 */
     protected static final int SCANNER_STATE_CONTENT = 22;
 
     /** Scanner state: processing instruction. */
@@ -106,10 +106,10 @@ public class XMLDocumentFragmentScannerImpl
     /** Scanner state: XML Declaration */
     protected static final int SCANNER_STATE_XML_DECL = 25;
 
-    /** Scanner state: root element. */
+    /** Scanner state: root element. 43-->21-->26-->22-->37-->38-->39-->22-->37-->21-->27-->22-->37*/
     protected static final int SCANNER_STATE_ROOT_ELEMENT = 26;
 
-    /** Scanner state: comment. */
+    /** Scanner state: comment. 注释'<--'   43-->21-->27-->43*/
     protected static final int SCANNER_STATE_COMMENT = 27;
 
     /** Scanner state: reference. */
@@ -136,10 +136,10 @@ public class XMLDocumentFragmentScannerImpl
     /** Scanner state: Text declaration. */
     protected static final int SCANNER_STATE_TEXT_DECL = 36;
 
-    /** Scanner state: Text declaration. */
+    /** Scanner state: Text declaration. 字符数据*/
     protected static final int SCANNER_STATE_CHARACTER_DATA = 37;
 
-    //<book type="hard">foo</book>
+    //<book type="hard">foo</book> 开始标签 '<book'
     protected static final int SCANNER_STATE_START_ELEMENT_TAG = 38;
 
     //<book type="hard">foo</book> reading </book>

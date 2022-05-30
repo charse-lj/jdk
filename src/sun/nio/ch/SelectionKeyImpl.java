@@ -43,11 +43,11 @@ public final class SelectionKeyImpl extends AbstractSelectionKey {
     // 发起注册的通道
     private final SelChImpl channel;
     
-    // 通道注册到的选择器
+    // 通道注册的选择器
     private final SelectorImpl selector;
     
     /** index of key in pollfd array, used by some Selector implementations */
-    // 当前"选择键"在"待监听键列表"(Java层)中的索引，参见WindowsSelectorImpl#channelArray
+    // 当前"选择键"在"待监听键列表"(Java层)中的索引，参见WindowsSelectorImpl#channelArray;该SelectionKey在注册选择器中储存SelectionKey集合中的下标索引，当该SelectionKey被撤销时，index为-1
     private int index;
     
     // 通道注册/监听的事件：SelectionKey.XXX
@@ -144,7 +144,7 @@ public final class SelectionKeyImpl extends AbstractSelectionKey {
         return this;
     }
     
-    /*
+    /**
      *【覆盖更新】当前"选择键"内的监听事件，如果新旧事件不同，则将当前"选择键"加入到选择器的"已更新键临时队列"中。
      * 事件注册完成后，返回当前"选择键"。
      *

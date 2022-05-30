@@ -63,7 +63,7 @@ public abstract class AbstractSelectionKey extends SelectionKey {
      *
      * If this key has not yet been cancelled then it is added to its selector's cancelled-key set while synchronized on that set.
      */
-    // 取消当前"选择键"对象，取消之后其状态变为无效
+    // 取消当前"选择键"对象，取消之后其状态变为无效;注意，删除的SelectionKey并不会马上从选择器上删除，而是会加入一个需删除键的集合中，等到下一次调用选择方法才会将它从选择器中删除
     public final void cancel() {
         /*
          * Synchronizing "this" to prevent this key from getting canceled multiple times by different threads,

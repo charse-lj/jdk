@@ -48,7 +48,7 @@ import java.util.Random;
  * A simple Pipe implementation based on a socket connection.
  */
 /*
- * 单向同步管道的实现类，由写通道SinkChannel和读通道SourceChannel组成，可以从写通道写入数据，从读通道读取数据。
+ * 单向同步管道的实现类，由写通道SinkChannel和读通道SourceChannel组成，可以向通道写入数据，从通道读取数据。
  * 读写管道实际上是通过Socket进行通信的。
  */
 class PipeImpl extends Pipe {
@@ -164,7 +164,7 @@ class PipeImpl extends Pipe {
                             // 创建一个未绑定地址和端口的ServerSocket，并返回其关联的Socket通道
                             serverSocketChannel = ServerSocketChannel.open();
                             
-                            // 返回由当前ServerSocket通道适配而成的ServerSocket
+                            // 返回与当前ServerSocketChannel关联的ServerSocket
                             ServerSocket serverSocket = serverSocketChannel.socket();
                             
                             // 待绑定地址：环回IP+随机端口
@@ -181,7 +181,7 @@ class PipeImpl extends Pipe {
                         }
                         
                         /* Establish connection (assume connections are eagerly accepted) */
-                        // 构造一个[客户端Socket]，并将其连接到远端
+                        // 构造一个[客户端Socket]，并将其连接到服务端
                         socketClient = SocketChannel.open(serverAddr);
                         
                         // 使用随机字节填充secret数组

@@ -73,6 +73,7 @@ class DirectByteBuffer extends MappedByteBuffer implements DirectBuffer {
         // 获取每页的大小
         int ps = Bits.pageSize();
         // 如果是按页对齐的，多分配一页容量（因为后续可能需要按页对齐）
+        // size = cap或者 cap+ps --> 表示系统中保存总分配内存（按页分配）的大小
         long size = Math.max(1L, (long) cap + (pa ? ps : 0));
         
         // 尽量保障有足够多内存可以使用
@@ -93,8 +94,9 @@ class DirectByteBuffer extends MappedByteBuffer implements DirectBuffer {
         // 要求地址按页向上对齐
         if(pa && (base % ps != 0)) {
             // Round up to page boundary
-            address = base + ps - (base & (ps - 1));
+            address = base + ps - (base & (ps - 1)); //base + ps - (base & (ps - 1)) = ps
         } else {
+            //地址刚好是pageSize的倍数
             address = base;
         }
         

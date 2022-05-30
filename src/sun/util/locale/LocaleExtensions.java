@@ -44,6 +44,9 @@ import sun.util.locale.InternalLocaleBuilder.CaseInsensitiveChar;
 import sun.util.locale.InternalLocaleBuilder.CaseInsensitiveString;
 
 
+/**
+ * 扩充
+ */
 public class LocaleExtensions {
 
     private final Map<Character, Extension> extensionMap;

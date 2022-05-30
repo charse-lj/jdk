@@ -290,7 +290,7 @@ public interface AnnotatedElement {
      *
      * @since 1.5
      */
-    // 1-1 返回该元素上所有类型的注解（对于类来说，包括继承来的注解）
+    // 1-1 返回该元素上所有类型的注解（对于类来说，包括所有从父类继承来的注解）
     Annotation[] getAnnotations();
     
     /**
@@ -307,7 +307,7 @@ public interface AnnotatedElement {
      * @throws NullPointerException if the given annotation class is null
      * @since 1.5
      */
-    // 1-2 返回该元素上指定类型的注解（对于类来说，包括继承来的注解）
+    // 1-2 返回该元素上指定类型的注解（对于类来说，包括所有从父类继承来的注解）
     <T extends Annotation> T getAnnotation(Class<T> annotationClass);
     
     /**
@@ -346,7 +346,7 @@ public interface AnnotatedElement {
      * array is returned.
      * @since 1.8
      */
-    // 1-3 返回该元素上指定类型的注解（对于类来说，包括继承来的注解）[支持获取@Repeatable类型的注解]
+    // 1-3 返回该元素上指定类型的注解（对于类来说，包括所有从父类继承来的注解）[支持获取@Repeatable类型的注解]
     default <T extends Annotation> T[] getAnnotationsByType(Class<T> annotationClass) {
         /*
          * Definition of associated: directly or indirectly present OR
@@ -385,7 +385,7 @@ public interface AnnotatedElement {
      *
      * @since 1.5
      */
-    // 2-1 返回该元素上所有类型的注解（对于类来说，不包括继承来的注解）
+    // 2-1 返回该元素上所有类型的注解（对于类来说，不包括从所有父类继承来的注解）
     Annotation[] getDeclaredAnnotations();
     
     /**
@@ -409,7 +409,7 @@ public interface AnnotatedElement {
      * annotation type matches the argument type.
      * @since 1.8
      */
-    // 2-2 返回该元素上指定类型的注解（对于类来说，不包括继承来的注解）
+    // 2-2 返回该元素上指定类型的注解（对于类来说，不包括从所有父类继承来的注解）
     default <T extends Annotation> T getDeclaredAnnotation(Class<T> annotationClass) {
         Objects.requireNonNull(annotationClass);
         // Loop over all directly-present annotations looking for a matching one
@@ -468,7 +468,7 @@ public interface AnnotatedElement {
      * results of calling {@link #getDeclaredAnnotation(Class)}.
      * @since 1.8
      */
-    // 2-3 返回该元素上指定类型的注解（对于类来说，不包括继承来的注解）[支持获取@Repeatable类型的注解]
+    // 2-3 返回该元素上指定类型的注解（对于类来说，不包括所有从父类继承来的注解）[支持获取@Repeatable类型的注解]
     default <T extends Annotation> T[] getDeclaredAnnotationsByType(Class<T> annotationClass) {
         Objects.requireNonNull(annotationClass);
         return AnnotationSupport.

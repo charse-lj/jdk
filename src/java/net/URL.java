@@ -176,7 +176,7 @@ public final class URL implements Serializable {
      */
     private static final String protocolPathProp = "java.protocol.handler.pkgs";
     
-    // The protocol to use (ftp, http, nntp, ... etc.)
+    // The protocol to use (ftp, http, nntp,jrt,file,jar,jmod,mailto ... etc.)
     private String protocol;            // 协议
     // The authority part of this URL
     private String authority;           // 登录信息
@@ -577,7 +577,9 @@ public final class URL implements Serializable {
     // 基于context解析spec，从spec中解析到的URL组件会覆盖到context中以形成新的URL返回，如果spec是相对路径，则会追加在context原有路径上；handler显式指定了URLStreamHandler
     public URL(URL context, String spec, URLStreamHandler handler) throws MalformedURLException {
         String original = spec;
+        //limit -->结束位置
         int i, limit, c;
+        //起始位置
         int start = 0;
         String newProtocol = null;
         boolean aRef = false;
@@ -632,6 +634,7 @@ public final class URL implements Serializable {
                 // spec中遇到了协议名称
                 if(isValidProtocol(s)) {
                     newProtocol = s;
+                    //修改其实位置,现在到了:后面
                     start = i + 1;
                 }
                 
@@ -678,10 +681,12 @@ public final class URL implements Serializable {
             }
             
             this.handler = handler;
-            
+            //开始查找锚点
             i = spec.indexOf('#', start);
             if(i >= 0) {
+                //查询到
                 ref = spec.substring(i + 1, limit);
+                //修改位置
                 limit = i;
             }
             

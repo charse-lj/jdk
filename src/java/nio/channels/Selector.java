@@ -267,8 +267,9 @@ import java.util.function.Consumer;
  * @see SelectableChannel
  * @see SelectionKey
  * @since 1.4
+ *
+ * 通道选择器，完成对通道的多路复用
  */
-// 通道选择器，完成对通道的多路复用
 public abstract class Selector implements Closeable {
     
     /*▼ 构造器 ████████████████████████████████████████████████████████████████████████████████┓ */
@@ -296,8 +297,9 @@ public abstract class Selector implements Closeable {
      * @return A new selector
      *
      * @throws IOException If an I/O error occurs
+     *
+     * 构造一个选择器Selector
      */
-    // 构造一个选择器Selector
     public static Selector open() throws IOException {
         return SelectorProvider.provider().openSelector();
     }

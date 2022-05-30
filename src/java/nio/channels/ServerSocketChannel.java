@@ -74,8 +74,9 @@ import java.nio.channels.spi.SelectorProvider;
  * @author Mark Reinhold
  * @author JSR-51 Expert Group
  * @since 1.4
+ *
+ * ServerSocket通道，支持在非阻塞模式下运行
  */
-// ServerSocket通道，支持在非阻塞模式下运行
 public abstract class ServerSocketChannel extends AbstractSelectableChannel implements NetworkChannel {
     
     /*▼ 构造器 ████████████████████████████████████████████████████████████████████████████████┓ */
@@ -111,8 +112,9 @@ public abstract class ServerSocketChannel extends AbstractSelectableChannel impl
      * @return A new socket channel
      *
      * @throws IOException If an I/O error occurs
+     *
+     * 构造一个未绑定的ServerSocket，本质是创建了[服务端Socket(监听)]，内部初始化了该Socket的文件描述符
      */
-    // 构造一个未绑定的ServerSocket，本质是创建了[服务端Socket(监听)]，内部初始化了该Socket的文件描述符
     public static ServerSocketChannel open() throws IOException {
         return SelectorProvider.provider().openServerSocketChannel();
     }

@@ -1467,7 +1467,9 @@ public class HashMap<K,V> extends AbstractMap<K,V> implements Map<K,V>, Cloneabl
      * 比如输入13，返回16，输入17，返回32
      */
     static final int tableSizeFor(int cap) {
+        // >>> 无符号右移,高位补0
         int n = -1 >>> Integer.numberOfLeadingZeros(cap - 1);
+        // 变成2的幂
         return (n<0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
     }
     
@@ -1520,7 +1522,8 @@ public class HashMap<K,V> extends AbstractMap<K,V> implements Map<K,V>, Cloneabl
         Node<K, V> first, e;
         int n;
         K k;
-        
+
+        //计算index的方法：(n - 1) & hash，first是这个数组table中index下标处存放的对象
         if((tab = table) != null && (n = tab.length)>0 && (first = tab[(n - 1) & hash]) != null) {
             /*
              * 对哈希槽（链）中的首个元素进行判断
@@ -2658,16 +2661,20 @@ public class HashMap<K,V> extends AbstractMap<K,V> implements Map<K,V>, Cloneabl
                     p = pr;
                 } else if((pk = p.key) == key || (key != null && key.equals(pk))) {
                     return p;
+                    //hash值相等，但key不匹配
                 } else if(pl == null) {
                     p = pr;
                 } else if(pr == null) {
                     p = pl;
+                    //若k的比较函数kc不为空，且k是可比较的，则根据k和pk的比较结果来决定继续在p的哪个子树中寻找
                 } else if((kc != null || (kc = comparableClassFor(key)) != null)
                     && (dir = compareComparables(kc, key, pk)) != 0) {
                     p = (dir<0) ? pl : pr;
+                    //若k不可比，则只能分别去p的左右子树中碰运气了
                 } else if((q = pr.find(hash, key, kc)) != null) {
                     return q;
                 } else {
+                    //到这里表示未能在p的右子树中匹配成功，则在左子树中继续
                     p = pl;
                 }
             } while(p != null);

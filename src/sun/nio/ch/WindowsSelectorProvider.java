@@ -40,6 +40,7 @@ import java.nio.channels.spi.AbstractSelector;
 // 平台相关的选择器工厂，用于生产依赖平台的选择器Selector
 public class WindowsSelectorProvider extends SelectorProviderImpl {
     // 生产Selector
+    @Override
     public AbstractSelector openSelector() throws IOException {
         return new WindowsSelectorImpl(this);
     }

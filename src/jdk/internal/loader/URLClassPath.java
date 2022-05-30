@@ -171,15 +171,19 @@ public class URLClassPath {
      *
      * @apiNote Used to create the application class path.
      */
-    URLClassPath(String cp, boolean skipEmptyElements) {
+    public URLClassPath(String cp, boolean skipEmptyElements) {
         ArrayList<URL> path = new ArrayList<>();
         if (cp != null) {
             // map each element of class path to a file URL
+            // 遍历字符中路径分隔符间的字符
             int off = 0, next;
             do {
+                //cp中下一个File.pathSeparator的位置
                 next = cp.indexOf(File.pathSeparator, off);
                 String element = (next == -1)
+                        //不存在,截取到末尾
                     ? cp.substring(off)
+                        //存在,取其中字符
                     : cp.substring(off, next);
                 if (element.length() > 0 || !skipEmptyElements) {
                     URL url = toFileURL(element);

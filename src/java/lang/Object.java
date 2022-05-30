@@ -40,6 +40,7 @@ import jdk.internal.HotSpotIntrinsicCandidate;
 public class Object {
     
     static {
+        //静态代码块,该方法用来注册本类所有的本地方法,通过JNI调用
         registerNatives();
     }
     

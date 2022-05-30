@@ -35,11 +35,12 @@
 
 package java.util.concurrent.locks;
 
+import jdk.internal.vm.annotation.ReservedStackAccess;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
-import jdk.internal.vm.annotation.ReservedStackAccess;
 
 /**
  * A reentrant mutual exclusion {@link Lock} with the same basic
@@ -104,8 +105,8 @@ import jdk.internal.vm.annotation.ReservedStackAccess;
  * the same thread. Attempts to exceed this limit result in
  * {@link Error} throws from locking methods.
  *
- * @since 1.5
  * @author Doug Lea
+ * @since 1.5
  */
 /*
  * 可重入锁，适合线程的顺序执行，即在某个时间段，只可以有一个线程持有锁
@@ -117,42 +118,45 @@ import jdk.internal.vm.annotation.ReservedStackAccess;
  * 释放锁的过程，可以看做是消费许可证，线程丢弃了这个许可证，就相当于丧失了锁的控制权
  */
 public class ReentrantLock implements Lock, Serializable {
-    
+
     private static final long serialVersionUID = 7373984872572414699L;
-    
-    /** Synchronizer providing all implementation mechanics */
-    // Sync是一个同步队列，这是锁的真正实现
+
+    /**
+     * Synchronizer providing all implementation mechanics
+     * Sync是一个同步队列，这是锁的真正实现
+     */
+
     private final Sync sync;
-    
-    
+
+
     /*▼ 构造方法 ████████████████████████████████████████████████████████████████████████████████┓ */
-    
+
     /**
      * Creates an instance of {@code ReentrantLock}.
      * This is equivalent to using {@code ReentrantLock(false)}.
+     * <p>
+     * 默认创建一个非公平锁
      */
-    // 默认创建一个非公平锁
     public ReentrantLock() {
         sync = new NonfairSync();
     }
-    
+
     /**
      * Creates an instance of {@code ReentrantLock} with the
      * given fairness policy.
      *
-     * @param fair {@code true} if this lock should use a fair ordering policy
+     * @param fair {@code true} if this lock should use a fair ordering policy 创建一个锁，fair决定锁是公平锁还是非公平锁
      */
-    // 创建一个锁，fair决定锁是公平锁还是非公平锁
     public ReentrantLock(boolean fair) {
         sync = fair ? new FairSync() : new NonfairSync();
     }
-    
+
     /*▲ 构造方法 ████████████████████████████████████████████████████████████████████████████████┛ */
-    
-    
-    
+
+
+
     /*▼ 申请/释放锁 ████████████████████████████████████████████████████████████████████████████████┓ */
-    
+
     /**
      * Acquires the lock.
      *
@@ -166,13 +170,14 @@ public class ReentrantLock implements Lock, Serializable {
      * current thread becomes disabled for thread scheduling
      * purposes and lies dormant until the lock has been acquired,
      * at which time the lock hold count is set to one.
+     * 申请独占锁，允许阻塞带有中断标记的线程（不一定成功）
      */
-    // 申请独占锁，允许阻塞带有中断标记的线程（不一定成功）
+    @Override
     public void lock() {
         // 生产一张许可证
         sync.acquire(1);
     }
-    
+
     /**
      * Acquires the lock unless the current thread is
      * {@linkplain Thread#interrupt interrupted}.
@@ -209,7 +214,7 @@ public class ReentrantLock implements Lock, Serializable {
      * the lock,
      *
      * </ul>
-     *
+     * <p>
      * then {@link InterruptedException} is thrown and the current thread's
      * interrupted status is cleared.
      *
@@ -224,7 +229,7 @@ public class ReentrantLock implements Lock, Serializable {
         // 生产一张许可证
         sync.acquireInterruptibly(1);
     }
-    
+
     /**
      * Acquires the lock if it is not held by another thread within the given
      * waiting time and the current thread has not been
@@ -290,12 +295,10 @@ public class ReentrantLock implements Lock, Serializable {
      *
      * @param timeout the time to wait for the lock
      * @param unit    the time unit of the timeout argument
-     *
      * @return {@code true} if the lock was free and was acquired by the
      * current thread, or the lock was already held by the current
      * thread; and {@code false} if the waiting time elapsed before
      * the lock could be acquired
-     *
      * @throws InterruptedException if the current thread is interrupted
      * @throws NullPointerException if the time unit is null
      */
@@ -304,7 +307,7 @@ public class ReentrantLock implements Lock, Serializable {
         // 生产一张许可证
         return sync.tryAcquireNanos(1, unit.toNanos(timeout));
     }
-    
+
     /**
      * Acquires the lock only if it is not held by another thread at the time
      * of invocation.
@@ -336,7 +339,7 @@ public class ReentrantLock implements Lock, Serializable {
         // 生产一张许可证
         return sync.nonfairTryAcquire(1);
     }
-    
+
     /**
      * Attempts to release this lock.
      *
@@ -353,11 +356,10 @@ public class ReentrantLock implements Lock, Serializable {
         // 消费一张许可证
         sync.release(1);
     }
-    
+
     /*▲ 申请/释放锁 ████████████████████████████████████████████████████████████████████████████████┛ */
-    
-    
-    
+
+
     /**
      * Returns a {@link Condition} instance for use with this
      * {@link Lock} instance.
@@ -401,7 +403,7 @@ public class ReentrantLock implements Lock, Serializable {
     public Condition newCondition() {
         return sync.newCondition();
     }
-    
+
     /**
      * Returns {@code true} if this lock has fairness set true.
      *
@@ -411,7 +413,7 @@ public class ReentrantLock implements Lock, Serializable {
     public final boolean isFair() {
         return sync instanceof FairSync;
     }
-    
+
     /**
      * Queries whether any threads are waiting to acquire this lock. Note that
      * because cancellations may occur at any time, a {@code true}
@@ -426,7 +428,7 @@ public class ReentrantLock implements Lock, Serializable {
     public final boolean hasQueuedThreads() {
         return sync.hasQueuedThreads();
     }
-    
+
     /**
      * Queries whether the given thread is waiting to acquire this
      * lock. Note that because cancellations may occur at any time, a
@@ -435,16 +437,14 @@ public class ReentrantLock implements Lock, Serializable {
      * in monitoring of the system state.
      *
      * @param thread the thread
-     *
      * @return {@code true} if the given thread is queued waiting for this lock
-     *
      * @throws NullPointerException if the thread is null
      */
     // 判断指定的线程是否在【|同步队列|】中排队
     public final boolean hasQueuedThread(Thread thread) {
         return sync.isQueued(thread);
     }
-    
+
     /**
      * Returns an estimate of the number of threads waiting to acquire
      * this lock.  The value is only an estimate because the number of
@@ -458,7 +458,7 @@ public class ReentrantLock implements Lock, Serializable {
     public final int getQueueLength() {
         return sync.getQueueLength();
     }
-    
+
     /**
      * Queries the number of holds on this lock by the current thread.
      *
@@ -492,7 +492,7 @@ public class ReentrantLock implements Lock, Serializable {
     public int getHoldCount() {
         return sync.getHoldCount();
     }
-    
+
     /**
      * Queries if this lock is held by the current thread.
      *
@@ -538,7 +538,7 @@ public class ReentrantLock implements Lock, Serializable {
     public boolean isHeldByCurrentThread() {
         return sync.isHeldExclusively();
     }
-    
+
     /**
      * Queries if this lock is held by any thread. This method is
      * designed for use in monitoring of the system state,
@@ -551,7 +551,7 @@ public class ReentrantLock implements Lock, Serializable {
     public boolean isLocked() {
         return sync.isLocked();
     }
-    
+
     /**
      * Queries whether any threads are waiting on the given condition
      * associated with this lock. Note that because timeouts and
@@ -561,9 +561,7 @@ public class ReentrantLock implements Lock, Serializable {
      * monitoring of the system state.
      *
      * @param condition the condition
-     *
      * @return {@code true} if there are any waiting threads
-     *
      * @throws IllegalMonitorStateException if this lock is not held
      * @throws IllegalArgumentException     if the given condition is
      *                                      not associated with this lock
@@ -571,18 +569,18 @@ public class ReentrantLock implements Lock, Serializable {
      */
     // 判断condition的【|条件队列|】中是否存在等待者
     public boolean hasWaiters(Condition condition) {
-        if(condition == null) {
+        if (condition == null) {
             throw new NullPointerException();
         }
-        
-        if(!(condition instanceof AbstractQueuedSynchronizer.ConditionObject)) {
+
+        if (!(condition instanceof AbstractQueuedSynchronizer.ConditionObject)) {
             throw new IllegalArgumentException("not owner");
         }
-        
+
         // 判断condition的【|条件队列|】中是否存在等待者
         return sync.hasWaiters((AbstractQueuedSynchronizer.ConditionObject) condition);
     }
-    
+
     /**
      * Returns an estimate of the number of threads waiting on the
      * given condition associated with this lock. Note that because
@@ -592,9 +590,7 @@ public class ReentrantLock implements Lock, Serializable {
      * state, not for synchronization control.
      *
      * @param condition the condition
-     *
      * @return the estimated number of waiting threads
-     *
      * @throws IllegalMonitorStateException if this lock is not held
      * @throws IllegalArgumentException     if the given condition is
      *                                      not associated with this lock
@@ -602,17 +598,17 @@ public class ReentrantLock implements Lock, Serializable {
      */
     // 返回condition中【|条件队列|】长度
     public int getWaitQueueLength(Condition condition) {
-        if(condition == null) {
+        if (condition == null) {
             throw new NullPointerException();
         }
-        
-        if(!(condition instanceof AbstractQueuedSynchronizer.ConditionObject)) {
+
+        if (!(condition instanceof AbstractQueuedSynchronizer.ConditionObject)) {
             throw new IllegalArgumentException("not owner");
         }
-        
+
         return sync.getWaitQueueLength((AbstractQueuedSynchronizer.ConditionObject) condition);
     }
-    
+
     /**
      * Returns the thread that currently owns this lock, or
      * {@code null} if not owned. When this method is called by a
@@ -630,7 +626,7 @@ public class ReentrantLock implements Lock, Serializable {
     protected Thread getOwner() {
         return sync.getOwner();
     }
-    
+
     /**
      * Returns a collection containing threads that may be waiting to
      * acquire this lock.  Because the actual set of threads may change
@@ -646,7 +642,7 @@ public class ReentrantLock implements Lock, Serializable {
     protected Collection<Thread> getQueuedThreads() {
         return sync.getQueuedThreads();
     }
-    
+
     /**
      * Returns a collection containing those threads that may be
      * waiting on the given condition associated with this lock.
@@ -658,9 +654,7 @@ public class ReentrantLock implements Lock, Serializable {
      * extensive condition monitoring facilities.
      *
      * @param condition the condition
-     *
      * @return the collection of threads
-     *
      * @throws IllegalMonitorStateException if this lock is not held
      * @throws IllegalArgumentException     if the given condition is
      *                                      not associated with this lock
@@ -668,19 +662,18 @@ public class ReentrantLock implements Lock, Serializable {
      */
     // 返回一个集合，该集合包含了condition的【|条件队列|】中所有结点内缓存的线程引用
     protected Collection<Thread> getWaitingThreads(Condition condition) {
-        if(condition == null) {
+        if (condition == null) {
             throw new NullPointerException();
         }
-        
-        if(!(condition instanceof AbstractQueuedSynchronizer.ConditionObject)) {
+
+        if (!(condition instanceof AbstractQueuedSynchronizer.ConditionObject)) {
             throw new IllegalArgumentException("not owner");
         }
-        
+
         return sync.getWaitingThreads((AbstractQueuedSynchronizer.ConditionObject) condition);
     }
-    
-    
-    
+
+
     /**
      * Returns a string identifying this lock, as well as its lock state.
      * The state, in brackets, includes either the String {@code "Unlocked"}
@@ -693,9 +686,8 @@ public class ReentrantLock implements Lock, Serializable {
         Thread o = sync.getOwner();
         return super.toString() + ((o == null) ? "[Unlocked]" : "[Locked by thread " + o.getName() + "]");
     }
-    
-    
-    
+
+
     /**
      * Base of synchronization control for this lock. Subclassed
      * into fair and nonfair versions below. Uses AQS state to
@@ -710,9 +702,9 @@ public class ReentrantLock implements Lock, Serializable {
      * 当线程释放锁时，许可证数量减少，直到为0
      */
     abstract static class Sync extends AbstractQueuedSynchronizer {
-        
+
         private static final long serialVersionUID = -5179523762034025860L;
-        
+
         /**
          * Performs non-fair tryLock.  tryAcquire is implemented in
          * subclasses, but both need nonfair try for trylock method.
@@ -722,60 +714,60 @@ public class ReentrantLock implements Lock, Serializable {
         final boolean nonfairTryAcquire(int acquires) {
             // 获取申请锁的线程
             final Thread current = Thread.currentThread();
-            
+
             // 当前许可证数量
             int c = getState();
-            
+
             // 如果锁没有被任何线程占用
-            if(c == 0) {
+            if (c == 0) {
                 /* 发现锁空闲时，不管【同步队列】中有没有人抢锁，该线程直接尝试抢锁，这也是"非公平"所在 */
-                
+
                 // 尝试更新许可证数量为acquires，返回true代表更新成功，即成功抢到了锁
-                if(compareAndSetState(0, acquires)) {
+                if (compareAndSetState(0, acquires)) { //原子操作,一旦成功,state变化,后续thread将不能进入
                     // 设置当前线程为<占有者线程>
                     setExclusiveOwnerThread(current);
                     return true;
                 }
             } else {
                 /* 至此，说明锁已被占用 */
-                
+
                 // 如果当前线程不是锁的占用者，直接返回false，代表抢锁失败，该线程需要去排队
-                if(current != getExclusiveOwnerThread()) {
+                if (current != getExclusiveOwnerThread()) {
                     return false;
                 }
-                
+
                 /* 至此，说明当前线程就是占用锁的线程，则需要再次持有锁，累计许可证数量，这也是"可重入"的含义 */
-                
+
                 // 更新许可证数量
                 int nextc = c + acquires;
-                if(nextc<0) {
+                if (nextc < 0) {
                     // 溢出
                     throw new Error("Maximum lock count exceeded");
                 }
                 setState(nextc);
-                
+
                 return true;
             }
-            
+
             return false;
         }
-        
+
         // 申请一次公平锁，返回值代表锁是否申请成功
         final boolean fairTryAcquire(int acquires) {
             // 获取申请锁的线程
             final Thread current = Thread.currentThread();
-            
+
             // 当前许可证数量
             int c = getState();
-            
+
             // 如果锁没有被任何线程占用
-            if(c == 0) {
+            if (c == 0) {
                 /* 发现锁空闲时，需要检查有没有其他线程在排队，如果没有其他人在队首，才尝试抢锁，这也是"公平"所在 */
-                
+
                 // 判断【|同步队列|】的队头是否还有其他（非当前线程）的线程在排队
-                if(!hasQueuedPredecessors()) {
+                if (!hasQueuedPredecessors()) {
                     // 尝试更新许可证数量为acquires，返回true代表更新成功，即成功抢到了锁
-                    if(compareAndSetState(0, acquires)){
+                    if (compareAndSetState(0, acquires)) {
                         // 设置当前线程为<占有者线程>
                         setExclusiveOwnerThread(current);
                         return true;
@@ -783,81 +775,82 @@ public class ReentrantLock implements Lock, Serializable {
                 }
             } else {
                 /* 至此，说明锁已被占用 */
-                
+
                 // 如果当前线程不是锁的占用者，直接返回false，代表抢锁失败，该线程需要去排队
-                if(current != getExclusiveOwnerThread()) {
+                if (current != getExclusiveOwnerThread()) {
                     return false;
                 }
-                
+
                 /* 至此，说明当前线程就是占用锁的线程，则需要再次持有锁，累计许可证数量，这也是"可重入"的含义 */
-                
+
                 // 更新许可证数量
                 int nextc = c + acquires;
-                if(nextc<0) {
+                if (nextc < 0) {
                     // 溢出
                     throw new Error("Maximum lock count exceeded");
                 }
+                //当前线程就是占用锁的现场,修改state值,是安全的
                 setState(nextc);
-                
+
                 return true;
             }
-            
+
             return false;
         }
-        
+
         // 释放一次锁，返回值表示同步锁是否处于自由状态（无线程持有）
         @ReservedStackAccess
         protected final boolean tryRelease(int releases) {
             // 计算应该剩余的许可证数量
             int c = getState() - releases;
-            
+
             // 如果当前线程不是锁的占用者，抛出异常
-            if(!isHeldExclusively()) {
+            if (!isHeldExclusively()) {
                 throw new IllegalMonitorStateException();
             }
-            
+
             // 记录许可证是否被全部消费，如果全部消费，则锁处于自由状态
             boolean free = false;
-            
-            if(c == 0) {
+
+            if (c == 0) {
                 free = true;
                 // 清空当前锁的持有者
                 setExclusiveOwnerThread(null);
             }
-            
+
             // 更新许可证数量
             setState(c);
-            
+
             return free;
         }
-        
+
         // 判断当前线程是否为锁的占用者
         protected final boolean isHeldExclusively() {
             // While we must in general read state before owner,
             // we don't need to do so to check if current thread is owner
             return getExclusiveOwnerThread() == Thread.currentThread();
         }
-        
+
         // 返回一个{条件对象}实例
         final ConditionObject newCondition() {
             return new ConditionObject();
         }
-        
+
         // 返回当前占用锁的线程
         final Thread getOwner() {
             return getState() == 0 ? null : getExclusiveOwnerThread();
         }
-        
+
         // 如果当前线程是锁的占用者，返回其持有的许可证数量，否则返回0
         final int getHoldCount() {
             return isHeldExclusively() ? getState() : 0;
         }
-        
+
         // 当前锁是否被占用，返回true被占用，否则代表处于空闲状态
         final boolean isLocked() {
             return getState() != 0;
         }
-        
+
         /**
          * Reconstitutes the instance from a stream (that is, deserializes it).
          */
@@ -866,7 +859,7 @@ public class ReentrantLock implements Lock, Serializable {
             setState(0); // reset to unlocked state
         }
     }
-    
+
     /**
      * Sync object for non-fair locks
      */
@@ -882,13 +875,13 @@ public class ReentrantLock implements Lock, Serializable {
      */
     static final class NonfairSync extends Sync {
         private static final long serialVersionUID = 7316153563782823691L;
-        
+
         // 申请一次非公平锁
         protected final boolean tryAcquire(int acquires) {
             return nonfairTryAcquire(acquires);
         }
     }
-    
+
     /**
      * Sync object for fair locks
      */
@@ -905,7 +898,7 @@ public class ReentrantLock implements Lock, Serializable {
      */
     static final class FairSync extends Sync {
         private static final long serialVersionUID = -3000897897090466540L;
-        
+
         /**
          * Fair version of tryAcquire.  Don't grant access unless
          * recursive call or no waiters or is first.
@@ -916,5 +909,5 @@ public class ReentrantLock implements Lock, Serializable {
             return fairTryAcquire(acquires);
         }
     }
-    
+
 }

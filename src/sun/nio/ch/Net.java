@@ -155,7 +155,8 @@ public class Net {
         // 执行绑定操作，exclusiveBind指示是否使用独占式绑定
         bind0(fd, preferIPv6, exclusiveBind, addr, port);
     }
-    
+
+    /**所有信息都记录到fd对应的对象中*/
     private static native void bind0(FileDescriptor fd, boolean preferIPv6, boolean useExclBind, InetAddress addr, int port) throws IOException;
     
     
@@ -581,12 +582,12 @@ public class Net {
         IOUtil.load();
         initIDs();
         
-        POLLIN = pollinValue();
-        POLLOUT = polloutValue();
-        POLLERR = pollerrValue();
-        POLLHUP = pollhupValue();
-        POLLNVAL = pollnvalValue();
-        POLLCONN = pollconnValue();
+        POLLIN = pollinValue();//768
+        POLLOUT = polloutValue();//16
+        POLLERR = pollerrValue();//1
+        POLLHUP = pollhupValue();//2
+        POLLNVAL = pollnvalValue();//4
+        POLLCONN = pollconnValue();//8192
     }
     
     /*▲ IO事件 ████████████████████████████████████████████████████████████████████████████████┛ */

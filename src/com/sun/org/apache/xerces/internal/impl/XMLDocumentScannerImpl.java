@@ -78,10 +78,10 @@ public class XMLDocumentScannerImpl
 
     // scanner states
 
-    /** Scanner state: XML declaration. */
+    /** Scanner state: XML declaration. xml声明*/
     protected static final int SCANNER_STATE_XML_DECL = 42;
 
-    /** Scanner state: prolog. */
+    /** Scanner state: prolog. 开端*/
     protected static final int SCANNER_STATE_PROLOG = 43;
 
     /** Scanner state: trailing misc. */

@@ -187,9 +187,8 @@ class ServerSocketChannelImpl extends ServerSocketChannel implements SelChImpl {
                 throw new AlreadyBoundException();
             }
             
-            // 确定绑定到哪个地址
-            InetSocketAddress isa = (local == null) ? new InetSocketAddress(0)  // 如果未指定绑定地址，则使用通配IP和随机端口
-                : Net.checkAddress(local);
+            // 确定绑定到哪个地址,如果未指定绑定地址，则使用通配IP和随机端口
+            InetSocketAddress isa = (local == null) ? new InetSocketAddress(0) : Net.checkAddress(local);
             
             // 如果存在安全管理器，则检查端口号
             SecurityManager sm = System.getSecurityManager();
@@ -200,7 +199,7 @@ class ServerSocketChannelImpl extends ServerSocketChannel implements SelChImpl {
             // ServerSocket进行bind操作之前的回调
             NetHooks.beforeTcpBind(fd, isa.getAddress(), isa.getPort());
             
-            // 为[服务端Socket(监听)]绑定IP地址与端口号
+            // 为[服务端Socket(监听)]绑定IP地址与端口号(fd 绑定ip和端口,可通过fd获取ip与端口)
             Net.bind(fd, isa.getAddress(), isa.getPort());
             
             // 使[服务端Socket(监听)]开启监听，backlog代表允许积压的待处理连接数
@@ -457,7 +456,8 @@ class ServerSocketChannelImpl extends ServerSocketChannel implements SelChImpl {
      */
     public int translateInterestOps(int ops) {
         int newOps = 0;
-        
+
+        //ops等于OP_ACCEPT
         if((ops & SelectionKey.OP_ACCEPT) != 0) {
             newOps |= Net.POLLIN;
         }

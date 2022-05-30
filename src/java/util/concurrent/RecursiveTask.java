@@ -66,7 +66,8 @@ package java.util.concurrent;
  * @since 1.7
  */
 // 带有返回值的任务
-public abstract class RecursiveTask<V> extends ForkJoinTask<V> {
+public abstract class
+RecursiveTask<V> extends ForkJoinTask<V> {
     private static final long serialVersionUID = 5232453952276485270L;
     
     /**

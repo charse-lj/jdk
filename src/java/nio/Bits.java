@@ -144,8 +144,11 @@ class Bits {
      * These methods should be called whenever direct memory is allocated or freed.
      * They allow the user to control the amount of direct memory which a process may access.  All sizes are specified in bytes.
      *
+     *尽量保障有足够多内存可以使用
+     *
+     * @param size 系统中保存总分配内存（按页分配）的大小
+     * @param cap 实际内存的大小
      */
-    // 尽量保障有足够多内存可以使用
     static void reserveMemory(long size, int cap) {
         // 还未获取到直接内存分配上限
         if(!MEMORY_LIMIT_SET && VM.initLevel() >= 1) {

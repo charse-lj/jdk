@@ -140,7 +140,7 @@ public abstract class AbstractSelectableChannel extends SelectableChannel {
      * 注：需要确保当前通道为非阻塞通道
      */
     public final SelectionKey register(Selector selector, int ops, Object attachment) throws ClosedChannelException {
-        // 校验待注册参数是否有效，如果无效则抛出异常
+        // 校验待注册参数是否有效，如果无效则抛出异常 ~validOps()-->取反
         if((ops & ~validOps()) != 0) {
             throw new IllegalArgumentException();
         }

@@ -205,6 +205,7 @@ public abstract class AbstractQueuedLongSynchronizer extends AbstractOwnableSync
         boolean interrupted = false;
         try {
             for(; ; ) {
+                //获取node的前驱
                 final Node p = node.predecessor();
                 if(p == head && tryAcquire(arg)) {
                     setHead(node);
@@ -1333,14 +1334,17 @@ public abstract class AbstractQueuedLongSynchronizer extends AbstractOwnableSync
         Node node = new Node(mode);
         
         for(; ; ) {
+            //暂存tail节点
             Node oldTail = tail;
             if(oldTail != null) {
+                //更新新增node节点的pre,指向tail节点
                 node.setPrevRelaxed(oldTail);
-                if(compareAndSetTail(oldTail, node)) {
-                    oldTail.next = node;
+                if(compareAndSetTail(oldTail, node)) { //更新tail节点为该新增的node节点
+                    oldTail.next = node; //更新前tail节点的next,指向node
                     return node;
                 }
             } else {
+                //初始化一个头节点
                 initializeSyncQueue();
             }
         }

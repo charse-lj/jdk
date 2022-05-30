@@ -53,6 +53,8 @@ package java.text;
  * @author      Mark Davis
  * @since 1.1
  * @see         java.text.Format
+ *
+ * 在解析期间跟踪当前位置的简单类
  */
 
 public class ParsePosition {

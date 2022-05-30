@@ -35,7 +35,7 @@ package javax.xml.stream;
 
 public interface XMLStreamConstants {
   /**
-   * Indicates an event is a start element
+   * Indicates an event is a start element 开始标签
    * @see javax.xml.stream.events.StartElement
    */
   public static final int START_ELEMENT=1;
@@ -51,13 +51,13 @@ public interface XMLStreamConstants {
   public static final int PROCESSING_INSTRUCTION=3;
 
   /**
-   * Indicates an event is characters
+   * Indicates an event is characters 字符数据
    * @see javax.xml.stream.events.Characters
    */
   public static final int CHARACTERS=4;
 
   /**
-   * Indicates an event is a comment
+   * Indicates an event is a comment 注释
    * @see javax.xml.stream.events.Comment
    */
   public static final int COMMENT=5;
@@ -72,6 +72,7 @@ public interface XMLStreamConstants {
   public static final int SPACE=6;
 
   /**
+   * xml 声明不算在文档开始
    * Indicates an event is a start document
    * @see javax.xml.stream.events.StartDocument
    */

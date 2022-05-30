@@ -97,6 +97,7 @@ public class FileChannelImpl extends FileChannel {
     /*
      * DirectIO的对齐粒度
      * 使用DirectIO时，数据要求按块对齐，alignment就是该块的大小
+     * 以DirectIO方式读写时，开辟的Buffer必须是系统每页大小的整数倍而且必须移页大小为标准对齐
      */
     private final int alignment;
     

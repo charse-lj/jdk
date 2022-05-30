@@ -128,7 +128,12 @@ import static java.time.temporal.ChronoUnit.SECONDS;
  * @implSpec This class is immutable and thread-safe.
  * @since 1.8
  */
-// 时间段，包含秒/纳秒部件，精确到纳秒
+/**
+ * Duration通常用秒或者纳秒相结合来表示一个时间量，最高精度为纳秒
+ * 通常用作表示两个时间之间的间隔,也称作持续时间，例如1s持续时间表示为PT1S
+ * 时间段，包含秒/纳秒部件，精确到纳秒
+ */
+
 public final class Duration implements TemporalAmount, Comparable<Duration>, Serializable {
     
     /**

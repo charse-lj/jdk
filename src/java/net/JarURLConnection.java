@@ -133,6 +133,13 @@ import sun.net.www.ParseUtil;
  *
  * @author Benjamin Renaud
  * @since 1.2
+ *
+ * 访问http服务器上的Jar包文件:      jar:http://www.jcg.com/bar/baz.jar!/
+ * 访问http服务器上Jar包内的文件：jar:http://www.jcg.com/bar/baz.jar!/com/foo/Quux.class
+ * 访问http服务器上Jar包内的目录：jar:http://www.jcg.com/bar/baz.jar!/com/foo/
+ * 访问本地文件系统上Jar包文件:          jar:file:/c:/baz.jar!/
+ * 访问本地文件系统上Jar包内的文件： jar:file:/c:/baz.jar!/com/foo/Quux.class
+ * 访问本地文件系统上Jar包内的目录： jar:file:/c:/baz.jar!/com/foo/
  */
 public abstract class JarURLConnection extends URLConnection {
 

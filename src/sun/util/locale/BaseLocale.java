@@ -41,9 +41,21 @@ public final class BaseLocale {
 
     private static final Cache CACHE = new Cache();
 
+    /**
+     * 语言
+     */
     private final String language;
+    /**
+     * 书写
+     */
     private final String script;
+    /**
+     * 区域
+     */
     private final String region;
+    /**
+     * 变体
+     */
     private final String variant;
 
     private volatile int hash;
@@ -52,6 +64,7 @@ public final class BaseLocale {
     // Locale.* constants and non-normalized BaseLocale$Keys used for lookup.
     private BaseLocale(String language, String script, String region, String variant,
                        boolean normalize) {
+        //是否需要转化
         if (normalize) {
             this.language = LocaleUtils.toLowerString(language).intern();
             this.script = LocaleUtils.toTitleString(script).intern();
@@ -69,6 +82,7 @@ public final class BaseLocale {
     // validation is performed.
     public static BaseLocale createInstance(String language, String region) {
         BaseLocale base = new BaseLocale(language, "", region, "", false);
+        //缓存
         CACHE.put(new Key(base), base);
         return base;
     }
@@ -77,6 +91,7 @@ public final class BaseLocale {
                                          String region, String variant) {
         // JDK uses deprecated ISO639.1 language codes for he, yi and id
         if (language != null) {
+            //进行映射
             if (LocaleUtils.caseIgnoreMatch(language, "he")) {
                 language = "iw";
             } else if (LocaleUtils.caseIgnoreMatch(language, "yi")) {
